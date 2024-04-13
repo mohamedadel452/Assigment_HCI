@@ -1,0 +1,53 @@
+<div class="container mt-3">
+    <h1 class="mb-4 text-center">Assignment</h1>
+  
+    <!-- Task Form -->
+    <div class="mb-4 p-4 bg-light rounded">
+        <p class="h5 mb-3">Task Name</p>
+        <input [(ngModel)]="newTask.name" class="form-control mb-3" placeholder="Enter Task Name" type="text" />
+  
+        <p class="h5 mb-3">Task Description</p>
+        <input [(ngModel)]="newTask.description" class="form-control mb-3" placeholder="Enter Description"
+            type="text" />
+  
+        <p class="h5 mb-3">Due Date Task</p>
+        <input [(ngModel)]="newTask.dueDate" class="form-control mb-3" type="date" />
+  
+        <button class="btn btn-primary" (click)="addTask()">Add Task</button>
+    </div>
+  
+    <!-- Edit Task Section -->
+    <div *ngIf="editingTask" class="mb-4 p-4 bg-light rounded">
+        <!-- Check if the task status is 'completed' -->
+        <input [(ngModel)]="editingTask.name" class="form-control mb-3" placeholder="Task Name" type="text"
+            [disabled]="editingTask.status === 'completed'" />
+        <input [(ngModel)]="editingTask.description" class="form-control mb-3" placeholder="Description" type="text"
+            [disabled]="editingTask.status === 'completed'" />
+        <input [(ngModel)]="editingTask.dueDate" class="form-control mb-3" type="date"
+            [disabled]="editingTask.status === 'completed'" />
+  
+        <button class="btn btn-success mr-2" (click)="saveEdit()"
+            [disabled]="editingTask.status === 'completed'">Save</button>
+        <button class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+    </div>
+  
+    <!-- Task List -->
+    <div class="mb-4 p-4 bg-light rounded">
+        <b>List of tasks</b>
+        <ul class="list-group">
+            <li *ngFor="let task of tasksService.getTasks()"
+                class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <input type="checkbox" [checked]="task.status === 'completed'" (change)="toggleStatus(task)"
+                        class="mr-2" />
+                    <span [class.text-decoration-line-through]="task.status === 'completed'">{{ task.name }}</span>
+                </div>
+                <div>
+                    <button class="btn btn-primary btn-sm mr-2" (click)="startEdit(task)"
+                        [disabled]="task.status === 'completed'">Edit</button>
+                    <button class="btn btn-danger btn-sm" (click)="deleteTask(task.id)">Delete</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+  </div>
